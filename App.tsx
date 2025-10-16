@@ -57,7 +57,7 @@ const Header: React.FC<{ onCTAClick: () => void }> = ({ onCTAClick }) => (
     </header>
 );
 
-const HeroSection: React.FC<{ onCTAClick: () => void }> = ({ onCTAClick }) => {
+const HeroSection: React.FC<{ onCTAClick: () => void; onArrowClick: () => void; }> = ({ onCTAClick, onArrowClick }) => {
     const [copyStatus, setCopyStatus] = useState('Compartilhar');
 
     const handleShare = useCallback(() => {
@@ -146,8 +146,14 @@ const HeroSection: React.FC<{ onCTAClick: () => void }> = ({ onCTAClick }) => {
                 </div>
             </div>
             
-            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10">
-                 <ChevronDownIcon className="h-8 w-8 text-white animate-bounce" />
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10">
+                 <button 
+                    onClick={onArrowClick} 
+                    className="p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-white/50"
+                    aria-label="Scroll to next section"
+                 >
+                    <ChevronDownIcon className="h-8 w-8 text-white animate-bounce" />
+                 </button>
             </div>
     </section>
 )};
@@ -765,19 +771,24 @@ const Footer: React.FC = () => (
 
 const App: React.FC = () => {
     const toolRef = useRef<HTMLElement>(null);
+    const howItWorksRef = useRef<HTMLElement>(null);
 
     const handleCTAClick = () => {
         toolRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
-
+    const handleArrowClick = () => {
+        howItWorksRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
 
     return (
         <div className="bg-[#0A0A0A] text-gray-300 font-sans animate-fade-in" style={{fontFamily: "'Inter', sans-serif"}}>
             <Header onCTAClick={handleCTAClick} />
             <main>
-                <HeroSection onCTAClick={handleCTAClick} />
-                <HowItWorksSection />
+                <HeroSection onCTAClick={handleCTAClick} onArrowClick={handleArrowClick} />
+                <div ref={howItWorksRef}>
+                    <HowItWorksSection />
+                </div>
                 <div ref={toolRef}>
                     <AnalysisTool />
                 </div>
