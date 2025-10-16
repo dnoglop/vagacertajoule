@@ -161,8 +161,8 @@ const HeroSection: React.FC<{ onCTAClick: () => void; onArrowClick: () => void; 
 const HowItWorksSection: React.FC = () => (
     <section className="py-24 px-4">
         <div className="max-w-7xl mx-auto text-center">
-            <h2 className="text-4xl font-bold text-white mb-4">Como a Mágica Acontece?</h2>
-            <p className="text-gray-400 text-lg mb-12">Em 4 passos, você transforma incerteza em estratégia.</p>
+            <h2 className="text-4xl font-bold text-white mb-4">Como essa mágica acontece?</h2>
+            <p className="text-gray-400 text-lg mb-12">Em 4 passos simples, você transforma incerteza em estratégia.</p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-8 text-left transform hover:-translate-y-2 transition-transform duration-300">
                     <CubeTransparentIcon className="h-10 w-10 text-orange-400 mb-4" />
