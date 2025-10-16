@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
+import Tesseract from 'tesseract.js';
 import { analyzeResume, searchForJobs } from './services/geminiService';
 import type { AnalysisResult, SavedAnalysis, JobSuggestion } from './types';
 import CompatibilityScore from './components/CompatibilityScore';
@@ -25,7 +26,8 @@ import {
   AcademicCapIcon,
   LinkIcon,
   MagnifyingGlassIcon,
-  BuildingOffice2Icon
+  BuildingOffice2Icon,
+  PhotoIcon
 } from '@heroicons/react/24/outline';
 
 declare const mammoth: any;
@@ -309,6 +311,7 @@ const AnalysisTool: React.FC = () => {
     const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
     const [loading, setLoading] = useState(false);
     const [isFileParsing, setIsFileParsing] = useState(false);
+    const [isOcrProcessing, setIsOcrProcessing] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     const [showWarningModal, setShowWarningModal] = useState(false);
@@ -358,6 +361,29 @@ const AnalysisTool: React.FC = () => {
         setTimeout(() => {
             setShowModalCloseButton(true);
         }, 2000);
+    };
+
+    const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        setIsOcrProcessing(true);
+        setError(null);
+        setJobDescription('Extraindo texto da imagem...');
+
+        try {
+            const worker = await Tesseract.createWorker('por');
+            const { data: { text } } = await worker.recognize(file);
+            setJobDescription(text);
+            await worker.terminate();
+        } catch (err) {
+            console.error("Error processing image with OCR:", err);
+            setError('Ocorreu um erro ao extrair o texto da imagem.');
+            setJobDescription('');
+        } finally {
+            setIsOcrProcessing(false);
+        }
+        event.target.value = '';
     };
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -549,18 +575,32 @@ const AnalysisTool: React.FC = () => {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-10">
                     <div className="flex flex-col">
-                    <label htmlFor="job-description" className="flex items-center mb-2 text-lg font-semibold text-gray-700">
-                        <DocumentTextIcon className="h-6 w-6 mr-2 text-orange-500" />
-                        Descrição da Vaga
-                    </label>
-                    <textarea
-                        id="job-description"
-                        value={jobDescription}
-                        onChange={(e) => setJobDescription(e.target.value)}
-                        placeholder="Cole aqui a descrição da vaga"
-                        className="w-full h-96 p-4 rounded-lg border-2 border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition duration-200 resize-none text-base shadow-sm"
-                        aria-label="Descrição da Vaga"
-                    />
+                        <div className="flex justify-between items-center mb-2">
+                            <label htmlFor="job-description" className="flex items-center text-lg font-semibold text-gray-700">
+                                <DocumentTextIcon className="h-6 w-6 mr-2 text-orange-500" />
+                                Descrição da Vaga
+                            </label>
+                            <label htmlFor="job-image-upload" className="cursor-pointer inline-flex items-center px-3 py-1.5 bg-gray-200 text-sm font-medium rounded-md hover:bg-gray-300 transition-colors disabled:opacity-50 disabled:cursor-wait" aria-disabled={isOcrProcessing}>
+                                <PhotoIcon className="h-5 w-5 mr-1" />
+                                {isOcrProcessing ? 'Lendo imagem...' : 'Enviar Print'}
+                            </label>
+                            <input
+                                id="job-image-upload"
+                                type="file"
+                                className="hidden"
+                                accept="image/png, image/jpeg, image/webp"
+                                onChange={handleImageUpload}
+                                disabled={isOcrProcessing}
+                            />
+                        </div>
+                        <textarea
+                            id="job-description"
+                            value={jobDescription}
+                            onChange={(e) => setJobDescription(e.target.value)}
+                            placeholder="Cole aqui a descrição da vaga ou envie um print"
+                            className="w-full h-96 p-4 rounded-lg border-2 border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition duration-200 resize-none text-base shadow-sm"
+                            aria-label="Descrição da Vaga"
+                        />
                     </div>
                     <div className="flex flex-col">
                     <div className="flex justify-between items-center mb-2">
@@ -595,7 +635,7 @@ const AnalysisTool: React.FC = () => {
                 <div className="flex flex-wrap justify-center items-center gap-4">
                     <button
                     onClick={handleAnalyzeClick}
-                    disabled={loading || isFileParsing}
+                    disabled={loading || isFileParsing || isOcrProcessing}
                     className="inline-flex items-center justify-center px-8 py-4 bg-orange-500 text-white font-bold text-lg rounded-xl shadow-lg shadow-orange-500/30 hover:bg-orange-600 focus:outline-none focus:ring-4 focus:ring-orange-500 focus:ring-opacity-50 transition-transform transform hover:scale-105 disabled:bg-orange-400 disabled:cursor-not-allowed disabled:transform-none"
                     >
                     {loading ? (
