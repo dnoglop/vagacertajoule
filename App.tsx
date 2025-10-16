@@ -147,41 +147,6 @@ const HeroSection: React.FC<{ onCTAClick: () => void }> = ({ onCTAClick }) => {
             <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10">
                  <ChevronDownIcon className="h-8 w-8 text-white animate-bounce" />
             </div>
-
-            <style jsx>{`
-                @keyframes blob {
-                    0% { transform: translate(0px, 0px) scale(1); }
-                    33% { transform: translate(30px, -50px) scale(1.1); }
-                    66% { transform: translate(-20px, 20px) scale(0.9); }
-                    100% { transform: translate(0px, 0px) scale(1); }
-                }
-                .animate-blob {
-                    animation: blob 7s infinite;
-                }
-                .animation-delay-2000 { animation-delay: 2s; }
-                .animation-delay-4000 { animation-delay: 4s; }
-
-                @keyframes spin {
-                    from { transform: rotate(0deg); }
-                    to { transform: rotate(360deg); }
-                }
-                @keyframes spin-reverse {
-                    from { transform: rotate(360deg); }
-                    to { transform: rotate(0deg); }
-                }
-                .animate-spin-slow {
-                    animation: spin 22s linear infinite;
-                }
-                .animate-spin-slow-reverse {
-                    animation: spin-reverse 28s linear infinite;
-                }
-                .animate-spin-medium-reverse {
-                    animation: spin-reverse 18s linear infinite;
-                }
-                .animate-spin-fast {
-                    animation: spin 12s linear infinite;
-                }
-            `}</style>
     </section>
 )};
 
@@ -735,15 +700,6 @@ const AnalysisTool: React.FC = () => {
                             </button>
                         </div>
                     </div>
-                    <style>{`
-                        @keyframes modal-in {
-                            to {
-                                transform: scale(1);
-                                opacity: 1;
-                            }
-                        }
-                        .animate-modal-in { animation: modal-in 0.3s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
-                    `}</style>
                 </div>
             )}
         </section>
@@ -777,20 +733,7 @@ const App: React.FC = () => {
 
 
     return (
-        <div className="bg-[#0A0A0A] text-gray-300 font-sans fade-in-effect" style={{fontFamily: "'Inter', sans-serif"}}>
-            <style jsx global>{`
-                @keyframes fadeIn {
-                    from { 
-                        opacity: 0;
-                    }
-                    to { 
-                        opacity: 1;
-                    }
-                }
-                .fade-in-effect {
-                    animation: fadeIn 0.8s ease-out forwards;
-                }
-            `}</style>
+        <div className="bg-[#0A0A0A] text-gray-300 font-sans animate-fade-in" style={{fontFamily: "'Inter', sans-serif"}}>
             <Header onCTAClick={handleCTAClick} />
             <main>
                 <HeroSection onCTAClick={handleCTAClick} />
