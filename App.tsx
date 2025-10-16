@@ -167,7 +167,7 @@ const HowItWorksSection: React.FC = () => (
                 <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-8 text-left transform hover:-translate-y-2 transition-transform duration-300">
                     <CubeTransparentIcon className="h-10 w-10 text-orange-400 mb-4" />
                     <h3 className="font-bold text-xl text-white mb-2">1. Cole a Vaga dos Sonhos</h3>
-                    <p className="text-gray-400">Pegue aquela descrição de vaga que parece impossível. Copie e cole. Sim, só isso.</p>
+                    <p className="text-gray-400">Pegue aquela descrição de vaga que parece impossível. Copie e cole (ou mande print). Sim, só isso.</p>
                 </div>
                  <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-8 text-left transform hover:-translate-y-2 transition-transform duration-300">
                     <BoltIcon className="h-10 w-10 text-orange-400 mb-4" />
